@@ -1,0 +1,40 @@
+set cut_paste_input [stack 0]
+version 9.0 v6
+push $cut_paste_input
+NoOp {
+ name Shutter_Calculator
+ selected true
+ xpos 524
+ ypos -234
+ addUserKnob {20 User l "Shutter Calculator"}
+ addUserKnob {16 meta_shutter l "METADATA - Shutter Angle"}
+ meta_shutter 180
+ addUserKnob {16 fps_org l "Original FPS"}
+ fps_org 48
+ addUserKnob {16 fps_new l "Current FPS" -STARTLINE}
+ fps_new 24
+ addUserKnob {16 client_respeed l "Respeed by Client (%)"}
+ client_respeed {{(fps_org/fps_new)*100}}
+ addUserKnob {16 shutterangle_norespeed l "Shutter Angle"}
+ shutterangle_norespeed {{meta_shutter*(1/(client_respeed/100))}}
+ addUserKnob {16 shutterphase_norespeed l "Shutter Phase"}
+ shutterphase_norespeed {{-(shutterangle_norespeed/2)}}
+ addUserKnob {26 ""}
+ addUserKnob {26 text l "<b>Additional Respeed by Studio Department" T " "}
+ addUserKnob {16 respeed_studio l "Respeed by Studio Department"}
+ respeed_studio 200
+ addUserKnob {26 ""}
+ addUserKnob {26 sfx l "<b>Values for Silhouette" T " "}
+ addUserKnob {16 shutterangle_respeed l "Shutter Angle with Studio Department Respeed"}
+ shutterangle_respeed {{shutterangle_norespeed*(1/(respeed_studio/100))}}
+ addUserKnob {16 shutterphase_respeed l "Shutter Phase with Studio Department Respeed"}
+ shutterphase_respeed {{-(shutterangle_respeed/2)}}
+ addUserKnob {26 ""}
+ addUserKnob {26 nuke l "Values for Nuke Roto Node" T " "}
+ addUserKnob {16 shutter_nuke l Shutter}
+ shutter_nuke {{((meta_shutter*(1/(client_respeed/100)))/360)*(1/(respeed_studio/100))}}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 label_1 l "" -STARTLINE T "<b>Shutter Calculator v1.0 - Siew Jia Yi"}
+ addUserKnob {16 round l INVISIBLE +INVISIBLE}
+ round {{"\[format \"%.3f\" \[value shutter_nuke]]"}}
+}
