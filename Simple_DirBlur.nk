@@ -1,0 +1,59 @@
+set cut_paste_input [stack 0]
+version 12.2 v3
+push $cut_paste_input
+Group {
+ name Simple_DirBlur
+ tile_color 0xff8238ff
+ selected true
+ xpos 1220
+ ypos 433
+ addUserKnob {20 User l Simple_DirBlur}
+ addUserKnob {41 Angle T NoOp2.Angle}
+ addUserKnob {41 Amount T NoOp2.Amount}
+}
+ NoOp {
+  inputs 0
+  name NoOp2
+  xpos 80
+  ypos 387
+  addUserKnob {20 User}
+  addUserKnob {7 Angle R 0 360}
+  addUserKnob {16 Amount}
+  Amount 10
+ }
+ Input {
+  inputs 0
+  name Source
+  xpos 263
+  ypos 254
+ }
+ Transform {
+  rotate {{NoOp2.Angle}}
+  center {1024 778}
+  name Transform3
+  label "Translate: \[value translate]"
+  xpos 263
+  ypos 294
+ }
+ Blur {
+  size {{NoOp2.Amount} 0}
+  name Blur3
+  label "Size: \[value size]"
+  xpos 263
+  ypos 380
+ }
+ Transform {
+  rotate {{NoOp2.Angle}}
+  center {1024 778}
+  invert_matrix true
+  name Transform4
+  label "Translate: \[value translate]"
+  xpos 263
+  ypos 487
+ }
+ Output {
+  name Output1
+  xpos 263
+  ypos 587
+ }
+end_group
