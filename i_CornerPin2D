@@ -1,0 +1,32 @@
+set cut_paste_input [stack 0]
+version 13.2 v8
+push $cut_paste_input
+CornerPin2D {
+to1 {0 0}
+to2 {5426 0}
+to3 {5426 1888}
+to4 {0 1888}
+invert false
+shutteroffset centred
+from1 {0 0}
+from2 {5426 0}
+from3 {5426 1888}
+from4 {0 1888}
+name i_CornerPin2D2
+selected true
+xpos 654
+ypos 3565
+addUserKnob {20 adv_tab l "Set to BBox"}
+addUserKnob {22 setPoints l "Set to Bbox" T "setBbox = nuke.thisNode()\n\n## Copying Values from X\n\nnuke.animation(\"from1.x\",\"expression\",(\"bbox.x\",))\nnuke.animation(\"from2.x\",\"expression\",(\"bbox.r\",))\nnuke.animation(\"from3.x\",\"expression\",(\"bbox.x\",))\nnuke.animation(\"from4.x\",\"expression\",(\"bbox.r\",))\n\n## Copying Values from Y\n\nnuke.animation(\"from1.y\",\"expression\",(\"bbox.y\",))\nnuke.animation(\"from2.y\",\"expression\",(\"bbox.y\",))\nnuke.animation(\"from3.y\",\"expression\",(\"bbox.t\",))\nnuke.animation(\"from4.y\",\"expression\",(\"bbox.t\",))\n\n## Removing Animation\n\nsetBbox\['from1'].clearAnimated()\nsetBbox\['from2'].clearAnimated()\nsetBbox\['from3'].clearAnimated()\nsetBbox\['from4'].clearAnimated()\n\n" +STARTLINE}
+addUserKnob {41 from1_1 l from1 T i_CornerPin2D2.from1}
+addUserKnob {41 from2_1 l from2 T i_CornerPin2D2.from2}
+addUserKnob {41 from3_1 l from3 T i_CornerPin2D2.from3}
+addUserKnob {41 from4_1 l from4 T i_CornerPin2D2.from4}
+addUserKnob {26 ""}
+addUserKnob {20 setKeyFrame l "Set KeyFrame" +INVISIBLE}
+addUserKnob {41 copy_from_1 l "Copy 'from'" T i_CornerPin2D2.copy_from}
+addUserKnob {41 to1_1 l to1 T i_CornerPin2D2.to1}
+addUserKnob {41 to2_1 l to2 T i_CornerPin2D2.to2}
+addUserKnob {41 to3_1 l to3 T i_CornerPin2D2.to3}
+addUserKnob {41 to4_1 l to4 T i_CornerPin2D2.to4}
+}
