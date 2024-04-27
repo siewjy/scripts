@@ -1,0 +1,69 @@
+set cut_paste_input [stack 0]
+version 13.2 v8
+push $cut_paste_input
+Group {
+ name Blank_STMap
+ tile_color 0x9b0000ff
+ label "Overscan: \[value numpixels]"
+ note_font_color 0xffffffff
+ selected true
+ xpos 74
+ ypos -916
+ lifetimeStart 1017
+ lifetimeEnd 1095
+ addUserKnob {20 User}
+ addUserKnob {26 Expression_Label l "" +STARTLINE T "Expression\n"}
+ addUserKnob {41 channel0 l Red T Expression6.channel0}
+ addUserKnob {41 expr0 l = T Expression6.expr0}
+ addUserKnob {41 channel1 l Green T Expression6.channel1}
+ addUserKnob {41 expr1 l = T Expression6.expr1}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 OverscanText l "" +STARTLINE T "Overscan\n"}
+ addUserKnob {41 numpixels l "Add Pixels" T AdjBBox1.numpixels}
+}
+ CheckerBoard2 {
+  inputs 0
+  name CheckerBoard1
+  xpos 583
+  ypos -509
+ }
+ AdjBBox {
+  numpixels 0
+  name AdjBBox1
+  xpos 583
+  ypos -412
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 456
+  ypos -527
+ }
+ Reformat {
+  scale 0.745
+  resize none
+  name Reformat1
+  xpos 456
+  ypos -487
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox3
+  xpos 456
+  ypos -412
+ }
+ Expression {
+  expr0 (x+0.5)/(width)
+  expr1 (y+0.5)/(height)
+  name Expression6
+  tile_color 0x990000ff
+  label "No-Values STmap"
+  xpos 456
+  ypos -357
+ }
+ Output {
+  name Output1
+  xpos 456
+  ypos -257
+ }
+end_group
