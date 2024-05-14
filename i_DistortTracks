@@ -4,19 +4,20 @@ push $cut_paste_input
 Group {
 name i_DistortTracks
 help "<b>Distort Tracks Gizmo</b>\n\n<b>About</b>:\nThis gizmo reformats and/or distorts tracking data based on a uv distortion map input. When you are working with CG elements in your comp that are undistorted and padded resolution, sometimes it is useful to reconcile tracking data from a 3d position through a camera into screen space. This data can then be used to do stuff in 2d: track in lens flares, matchmove roto or splinewarps, etc. The problem is that when this tracking data comes back from our padded undistorted 3d scene into distorted, unpadded resolution comp land, it doesn't line up. \n\n<b>Instructions</b>:\n1. Connect the UV input to a uv distortion map and set the channel that holds it, (for example, a LensDistortion node set to output type Displacement, outputting a UV distortion map into the forward.u and forward.v channels)\n2. Set the padded resolution format and the destination format: Padded resolution is the overscan resolution that you are distorting from, Destination format is the comp resolution you end up in. If they are the same, set them both to be the same.\n3. Add as many tracking points as you want and copy or link the data in. You can show or hide the input and output tracks for convenience. (It is easier to copy the data of many tracks in if you don't see the output track knobs.)\n4. Hit Execute, and all tracks will be distorted. The output tracking data will be copied into each tracks respective trk_out_# knob.\n\n<b>Notes</b>: \nNote that right now this only works with reformat types set to center, no resize, such as you would use when cropping a padded resolution cg plate back to comp resolution before distorting it. Theoretically this gizmo should work to 'reformat' tracking data as well. If you plug in an 'identity' uvmap, the tracking data should be undistorted, but reformatted from the source format to the destination format.\nAlso note that the distorted track output will switch to the reformatted track at the bounds of frame, so that the distorted track does not suddenly pop to 0,0 where the distortion map turns black.\n\nHuge thanks to Ivan Busquets for the ninja-comp technique used to invert the UV Map using a DisplaceGeo.\n\nCreated by Jed Smith. Comments and suggestions welcome: jedypod@gmail.com"
+onCreate "n = nuke.thisNode()\n\nn\['refTrack'].setEnabled(False)"
 knobChanged "# Sets the value of the uv_layer enumeration_knob to the list of input layers, \n# every time the input is changed\nfrom __future__ import with_statement \nn = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'ToggleOutput':\n    for knob in n.knobs():\n        if 'trk_out_' in knob or 'delete_trk_' in knob:\n            if k.value() == True:\n                n\[knob].setVisible(True)\n            else:\n                n\[knob].setVisible(False)\n                \nif k.name() == 'ShowTracks':\n    for knob in n.knobs():\n        if 'track_' in knob or 'delete_trk_' in knob:\n            if k.value() == True:\n                n\[knob].setVisible(True)\n            else:\n                n\[knob].setVisible(False)\n                \nif k.name() == 'SmoothToggle':\n    for knob in n.knobs():\n        if 'smooth' in knob or 's_Value' in knob:\n            if k.value() == True:\n                n\[knob].setVisible(True)\n            else:\n                n\[knob].setVisible(False)\n"
 tile_color 0xc2bcdcff
 selected true
-xpos 1739
-ypos 692
+xpos -483
+ypos 3332
 addUserKnob {20 DistortTracks}
 addUserKnob {3 tnum l INVISIBLE +INVISIBLE}
 addUserKnob {41 in l "uv layer" T SelectUV.in}
-addUserKnob {6 identity_uv_map l "<b><font size=4>&nbsp;Identity UV Map</b>" t "Enable if you want no transformation. \n\nFor example, if you just want to reformat the tracking data from Padded Format to Destination Format." -STARTLINE}
+addUserKnob {6 identity_uv_map l "<b><font size=4>&nbsp;Identity UV Map</b>" t "Enable if you want no transformation. \n\nFor example, if you just want to reformat the tracking data from Padded Format to Destination Format." -STARTLINE +INVISIBLE}
 addUserKnob {41 padded_format l "src format" t "This will be the format that the tracking data was created in. It will be transformed/distorted into the 'Root Format'." T PadFormat.format}
 addUserKnob {41 destination_format l "dst format" t "If using a padded format as a source resolution, this will be the destination resolution for the 'distorted' tracking data." T DestinationFormat.format}
 addUserKnob {26 spacer l " " T " "}
-addUserKnob {6 idistort_map l "Use IDistort Map" t "Distorts tracking data with an iDistort map instead of an STMap compatible UV Map." +STARTLINE}
+addUserKnob {6 idistort_map l "Use IDistort Map" t "Distorts tracking data with an iDistort map instead of an STMap compatible UV Map." +INVISIBLE +STARTLINE}
 addUserKnob {6 animated_uvmap l "Animated Distortion Map" t "Check this if the input UVMap is animated. This will slow down analysis." -STARTLINE}
 addUserKnob {7 precision l INVISIBLE t "Adjust the subdivide level of the uvmap invert - higher numbers result in increased accuracy at the expense of speed." +INVISIBLE R 2 16}
 precision 10.2
@@ -31,8 +32,8 @@ ToggleOutput true
 addUserKnob {20 advance l "Advanced Options" n 1}
 addUserKnob {26 _info l "" +STARTLINE +INVISIBLE T "This function support Trackers with up to 4 tracks.\n"}
 addUserKnob {22 setRef_Tracker l "Set Reference Tracker" T "refTrack = nuke.thisNode().knob('refTrack')\n\nwith nuke.root():\n    selected_node = nuke.selectedNode()\n    if \"Tracker\" in selected_node.name():\n        refTrack.setValue(selected_node.name())\n        \n    else:\n        nuke.message(\"Please Select a Tracker Node\")" +STARTLINE}
-addUserKnob {1 refTrack l " Reference Tracker " -STARTLINE}
-addUserKnob {22 copyTracks l "Copy Tracks from Tracker" T "def bakeCurve( curve, first, last, inc ):\n    '''bake an expresison curve into a keyframes curve'''\n    for f in range( first, last, inc ):\n        curve.setKey( f, curve.evaluate( f ) )\n    curve.setExpression( 'curve' )\n\n####################################################\ndef getCurves( knob, views ):\n    '''return a list of all animation curves found in the given knob'''\n    curves = \[]\n    for v in views:\n        curves.extend( knob.animations( v ) )\n    return curves\n\n####################################################\ndef bakeExpressionKnobs( node, first, last, inc, views ):  \n    '''bake all knobs in node that carry expressions'''\n    # GET ALL KNOBS WITH EXPRESSIONS IN THEM\n    expKnobs = \[ k for k in node.knobs().values() if k.hasExpression() ]\n\n    # GET ALL CURVES INSIDE THAT KNOB INCLUDING SPLIT FIELDS AND VIEWS\n    allCurves = \[]\n    for k in expKnobs:\n        allCurves += getCurves( k, views )\n\n    # BAKE ALL CURVES\n    for c in allCurves:\n        bakeCurve( c, first, last, inc )        \n\n####################################################\ndef bakeSelectedNodes():\n    '''bake selected nodes' knobs that carry expressions'''\n    ret = nuke.getFramesAndViews( 'Select Frame Range', '%s-%s' % (nuke.root().firstFrame(), nuke.root().lastFrame()) )\n    if not ret:\n        return\n    fRange = nuke.FrameRange( ret\[0] )\n    views = ret\[1]\n\n    n = nuke.thisNode()\n    bakeExpressionKnobs( n, fRange.first(), fRange.last(), fRange.increment(), views )\n\n####################################################\n\nthis = nuke.thisNode()\ns_name = this\[\"refTrack\"].value()\ntnum = int(this\[\"tnum\"].value())\nthis_name = this.name()\n\nnum = 0\n\nif not tnum == 0:\n\n    if not s_name == \"\":\n        \n        for i in range(tnum):\n        \n            num += 1\n            num_str = str(num) \n            \n            track_x = this_name + \".track_\" + num_str + \".x\"\n            track_y = this_name + \".track_\" + num_str + \".y\"\n            \n            source_x = s_name + \".tracks.\" + num_str + \".track_x\"\n            source_y = s_name + \".tracks.\" + num_str + \".track_y\"\n            \n            nuke.animation(track_x, \"expression\", (source_x,))\n            nuke.animation(track_y, \"expression\", (source_y,))\n        \n        bakeSelectedNodes()\n        \n        num = 0\n        \n        for i in range(tnum):\n            \n            num += 1\n            num_str = str(num) \n            \n            #track1.x.integrate(frame-s_Value, frame+s_Value) / (2*s_Value)\n            \n            smooth_knob = \"smooth_\" + num_str\n    \n            smoooth_x = \"trk_out_\" + num_str + \".x.integrate(frame-s_Value, frame+s_Value) / (2*s_Value)\"\n            smoooth_y = \"trk_out_\" + num_str + \".y.integrate(frame-s_Value, frame+s_Value) / (2*s_Value)\"\n            \n            n\[smooth_knob].setExpression(smoooth_x, 0)\n            n\[smooth_knob].setExpression(smoooth_y, 1)\n        \n    else:\n        nuke.message(\"Please set a Tracker as Reference!\")\n        \nelse:\n    nuke.message(\"Please Add Tracks before Copying Tracks\")\n        " +STARTLINE}
+addUserKnob {1 refTrack l " Reference Tracker " -STARTLINE +DISABLED}
+addUserKnob {22 copyTracks l "Copy Tracks from Tracker" T "def bakeCurve( curve, first, last, inc ):\n    '''bake an expresison curve into a keyframes curve'''\n    for f in range( first, last, inc ):\n        curve.setKey( f, curve.evaluate( f ) )\n    curve.setExpression( 'curve' )\n\n####################################################\ndef getCurves( knob, views ):\n    '''return a list of all animation curves found in the given knob'''\n    curves = \[]\n    for v in views:\n        curves.extend( knob.animations( v ) )\n    return curves\n\n####################################################\ndef bakeExpressionKnobs( node, first, last, inc, views ):  \n    '''bake all knobs in node that carry expressions'''\n    # GET ALL KNOBS WITH EXPRESSIONS IN THEM\n    expKnobs = \[ k for k in node.knobs().values() if k.hasExpression() ]\n\n    # GET ALL CURVES INSIDE THAT KNOB INCLUDING SPLIT FIELDS AND VIEWS\n    allCurves = \[]\n    for k in expKnobs:\n        allCurves += getCurves( k, views )\n\n    # BAKE ALL CURVES\n    for c in allCurves:\n        bakeCurve( c, first, last, inc )        \n\n####################################################\ndef bakeSelectedNodes():\n    '''bake selected nodes' knobs that carry expressions'''\n    ret = nuke.getFramesAndViews( 'Select Frame Range', '%s-%s' % (nuke.root().firstFrame(), nuke.root().lastFrame()) )\n    if not ret:\n        return\n    fRange = nuke.FrameRange( ret\[0] )\n    views = ret\[1]\n\n    n = nuke.thisNode()\n    bakeExpressionKnobs( n, fRange.first(), fRange.last(), fRange.increment(), views )\n\n####################################################\n\nthis = nuke.thisNode()\ns_name = this\[\"refTrack\"].value()\ntnum = int(this\[\"tnum\"].value())\nthis_name = this.name()\n\nnum = 0\n\nif not tnum == 0:\n\n    if not s_name == \"\":\n        \n        selected_node = nuke.toNode(s_name)\n        t_class = selected_node.Class()\n        \n        for i in range(tnum):\n        \n            num += 1\n            num_str = str(num) \n            \n            track_x = this_name + \".track_\" + num_str + \".x\"\n            track_y = this_name + \".track_\" + num_str + \".y\"\n            \n            if t_class == \"Tracker3\":\n                source_x = s_name + \".track\" + num_str + \".x\"\n                source_y = s_name + \".track\" + num_str + \".y\"\n            \n            elif t_class == \"Tracker4\":\n                source_x = s_name + \".tracks.\" + num_str + \".track_x\"\n                source_y = s_name + \".tracks.\" + num_str + \".track_y\"\n            \n            nuke.animation(track_x, \"expression\", (source_x,))\n            nuke.animation(track_y, \"expression\", (source_y,))\n        \n        bakeSelectedNodes()\n        \n        num = 0\n        \n        for i in range(tnum):\n            \n            num += 1\n            num_str = str(num) \n            \n            #track1.x.integrate(frame-s_Value, frame+s_Value) / (2*s_Value)\n            \n            smooth_knob = \"smooth_\" + num_str\n    \n            smoooth_x = \"trk_out_\" + num_str + \".x.integrate(frame-s_Value, frame+s_Value) / (2*s_Value)\"\n            smoooth_y = \"trk_out_\" + num_str + \".y.integrate(frame-s_Value, frame+s_Value) / (2*s_Value)\"\n            \n            n\[smooth_knob].setExpression(smoooth_x, 0)\n            n\[smooth_knob].setExpression(smoooth_y, 1)\n        \n    else:\n        nuke.message(\"Please set a Tracker as Reference!\")\n        \nelse:\n    nuke.message(\"Please Add Tracks before Copying Tracks\")\n        " +STARTLINE}
 addUserKnob {20 endGroup n -1}
 addUserKnob {26 ""}
 addUserKnob {26 text_02 l "" +STARTLINE T "Apply Distortion to Trackers"}
@@ -101,7 +102,7 @@ name Remove1
 xpos 180
 ypos -248
 }
-set N196687e0 [stack 0]
+set N67649a80 [stack 0]
 Expression {
 expr0 (x+0.5)/(width)
 expr1 (y+0.5)/(height)
@@ -117,7 +118,7 @@ note_font_color 0x7f7f7f01
 xpos 321
 ypos -177
 }
-push $N196687e0
+push $N67649a80
 Switch {
 inputs 2
 which {{parent.identity_uv_map}}
@@ -137,7 +138,7 @@ note_font_color 0x7f7f7f01
 xpos 211
 ypos -102
 }
-set N1968d780 [stack 0]
+set N66c362f0 [stack 0]
 Dot {
 name Dot14
 label " IDistort Style Map Input"
@@ -154,8 +155,8 @@ name IDistort_To_UVMap
 xpos 290
 ypos -57
 }
-set N196975b0 [stack 0]
-push $N1968d780
+set N66c31690 [stack 0]
+push $N66c362f0
 Switch {
 inputs 2
 which {{parent.idistort_map}}
@@ -174,7 +175,7 @@ note_font_color 0x7f7f7f01
 xpos 214
 ypos 66
 }
-set N196ae900 [stack 0]
+set N80931ef0 [stack 0]
 Dot {
 name Dot8
 note_font_size 42
@@ -210,7 +211,7 @@ name DestinationFormat
 xpos 400
 ypos 879
 }
-set N196cb550 [stack 0]
+set Nbec02b0 [stack 0]
 Reformat {
 resize none
 name PadFormat
@@ -225,7 +226,7 @@ name Camera1
 xpos 740
 ypos 858
 }
-push $N196ae900
+push $N80931ef0
 Dot {
 name Dot9
 label " Input Distortion Map"
@@ -248,7 +249,7 @@ name Grade5
 xpos 400
 ypos 687
 }
-push $N196ae900
+push $N80931ef0
 Dot {
 name Dot12
 note_font_size 42
@@ -315,7 +316,7 @@ xpos 620
 ypos 754
 disable {{parent.MasterFramehold.disable}}
 }
-push $N196cb550
+push $Nbec02b0
 ScanlineRender {
 inputs 3
 overscan {{(PadFormat.format.width/DestinationFormat.format.width-1)*PadFormat.format.width} {(PadFormat.format.height/DestinationFormat.format.height-1)*PadFormat.format.height}}
@@ -354,7 +355,7 @@ name CurveTool
 xpos 620
 ypos 1239
 }
-push $N196975b0
+push $N66c31690
 Expression {
 expr0 (r*width-x)*inv
 expr1 (g*height-y)*inv
