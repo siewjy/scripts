@@ -55,6 +55,9 @@ def readFromWrite():
     nodes_write = nuke.selectedNodes('Write')
     nodes_deep = nuke.selectedNodes('DeepWrite')
 
+    # label with frame range
+    frameRangelabel = str("Frames" + "\n" + "[value first] - [value last]")
+
     nodes = nodes_write + nodes_deep
 
     # break if empty selection
@@ -76,7 +79,7 @@ def readFromWrite():
             read_node['file'].fromUserText(file)
             read_node['frame_mode'].setValue('1.0')
             read_node['frame'].setValue(FFrame)
-		read_node['label'].setValue("TEST")
+            read_node['label'].setValue(frameRangelabel)
 
             read_node.setXpos(writeNode.xpos())
             read_node.setYpos(writeNode.ypos() + 50)
