@@ -110,6 +110,7 @@ def readFromWrite():
             read_node['last'].setValue(last)
             read_node['origfirst'].setValue(first)
             read_node['origlast'].setValue(last)
+			read_node['label'].setValue(frameRangelabel)
 
             if "DeepWrite" not in writeNode.Class():
                 # gather colorspace value
