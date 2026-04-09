@@ -56,7 +56,7 @@ def readFromWrite():
     nodes_deep = nuke.selectedNodes('DeepWrite')
 
     # label with frame range
-    frameRangelabel = str("Frames" + "\n" + "[value first] - [value last]")
+    frameRangelabel = str("\n" + "Frames" + "\n" + "[value first] - [value last]")
 
     nodes = nodes_write + nodes_deep
 
