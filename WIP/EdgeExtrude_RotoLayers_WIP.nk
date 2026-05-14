@@ -1,0 +1,3253 @@
+set cut_paste_input [stack 0]
+version 16.0 v1
+push $cut_paste_input
+Group {
+name EdgeExtrude_RotoLayers_WIP
+selected true
+xpos -12224
+ypos 2565
+addUserKnob {20 User}
+addUserKnob {26 inputMattes l "Input Mattes Control"}
+addUserKnob {26 opMattes l "Output Mattes Control"}
+addUserKnob {26 extrude l "Extrude Control"}
+addUserKnob {41 size l Size T Edge_Extrude_Directional3.size}
+addUserKnob {41 extend_blur_size l "Extrude Blur" T Edge_Extrude_Directional3.extend_blur_size}
+addUserKnob {41 angle l "Extrude Angle" T Edge_Extrude_Directional3.angle}
+}
+Input {
+inputs 0
+name Roto
+xpos -1546
+ypos -422
+number 1
+}
+PostageStamp {
+name PostageStamp4
+label Roto
+xpos -1546
+ypos -318
+postage_stamp true
+}
+Dot {
+name Dot98
+xpos -1512
+ypos -178
+}
+set Na17f000 [stack 0]
+Dot {
+name Dot86
+xpos -1512
+ypos 101
+}
+set Na17f400 [stack 0]
+Dot {
+name Dot87
+xpos -1677
+ypos 101
+}
+Shuffle2 {
+fromInput1 {
+{0}
+B
+}
+fromInput2 {
+{0}
+B
+}
+mappings "4 black -1 -1 rgba.red 0 0 black -1 -1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 rgba.red 0 0 rgba.alpha 0 3"
+name Shuffle24
+label Red
+xpos -1711
+ypos 186
+}
+Group {
+name Erode_Fine_RED_Output
+help "Erode an image with fine controls, as opposed to Nuke's default erode node."
+tile_color 0xef7033ff
+label "\[value size]"
+note_font "DejaVu Sans"
+xpos -1711
+ypos 259
+addUserKnob {20 erode_fine l "Fine Erode"}
+addUserKnob {41 channels T NodeWrapper1.channels}
+addUserKnob {26 ""}
+addUserKnob {6 round_filter l "Round Filter" t "Erode the image with a round Filter (well, it's more of a dodecagon... but... you know..) instead of a square filter." +STARTLINE}
+addUserKnob {7 size l Size t "Amount of erode/dilate. Positive values will grow the image, negative values will shrink it." R -10 10}
+addUserKnob {26 ""}
+addUserKnob {41 maskChannelInput l mask T NodeWrapper1.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T NodeWrapper1.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T NodeWrapper1.invert_mask}
+addUserKnob {41 fringe -STARTLINE T NodeWrapper1.fringe}
+addUserKnob {41 mix T NodeWrapper1.mix}
+addUserKnob {26 spin_copyright_div l "" +STARTLINE}
+addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nErode_Fine\nVersion 1.0\n2018" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.0 - 2018 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x75667fff
+label "round dilate trick"
+note_font_size 40
+xpos 212
+ypos -67
+bdwidth 299
+bdheight 618
+}
+Input {
+inputs 0
+name Inputmask
+xpos 251
+ypos 1257
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos -11
+ypos -243
+}
+Dot {
+name Dot15
+tile_color 0xcccccc00
+xpos 22
+ypos -160
+}
+set Na17fc00 [stack 0]
+Dot {
+name Dot3
+tile_color 0xcccccc00
+xpos 23
+ypos 33
+}
+set N3a0000 [stack 0]
+Dot {
+name Dot1
+tile_color 0xcccccc00
+xpos 296
+ypos 33
+}
+set N3a0400 [stack 0]
+Dot {
+name Dot2
+tile_color 0xcccccc00
+xpos 415
+ypos 33
+}
+AdjBBox {
+numpixels {{abs(ceil(parent.size)*1.4)+2}}
+name AdjBBox1
+xpos 381
+ypos 100
+}
+Dot {
+name Dot4
+tile_color 0xcccccc00
+xpos 415
+ypos 422
+}
+push $N3a0400
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 >= 1)"}}
+name Dilate1
+label "size \[value size]"
+xpos 262
+ypos 97
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform1
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 147
+}
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 == 2)"}}
+name Dilate2
+label "size \[value size]"
+xpos 262
+ypos 185
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform2
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 235
+}
+Dilate {
+size {{int(parent.size)//3}}
+name Dilate3
+label "size \[value size]"
+xpos 262
+ypos 273
+}
+Transform {
+rotate -60
+shutteroffset centred
+name Transform3
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 323
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 262
+ypos 418
+}
+push $N3a0000
+Dilate {
+size {{int(parent.size)}}
+name Dilate4
+label "size \[value size]"
+xpos -11
+ypos 97
+}
+Dot {
+name Dot14
+tile_color 0xcccccc00
+xpos 23
+ypos 491
+}
+set N3a1000 [stack 0]
+Dissolve {
+inputs 2
+which {{clamp(abs(parent.size))}}
+name Dissolve1
+xpos 262
+ypos 481
+}
+Dot {
+name Dot5
+tile_color 0xcccccc00
+xpos 296
+ypos 539
+}
+push $N3a1000
+Switch {
+inputs 2
+which {{parent.round_filter}}
+name Switch1
+xpos -11
+ypos 535
+}
+AdjBBox {
+numpixels 1
+name AdjBBox2
+xpos -11
+ypos 609
+}
+Dot {
+name Dot6
+tile_color 0xcccccc00
+xpos 23
+ypos 678
+}
+set N3a1800 [stack 0]
+Dot {
+name Dot8
+tile_color 0xcccccc00
+xpos 175
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10)*-1} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform5
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 823
+}
+push $N3a1800
+Dot {
+name Dot7
+tile_color 0xcccccc00
+xpos -127
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10) i} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform4
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 783
+}
+push $N3a1800
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge2
+xpos -11
+ypos 789
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge1
+xpos -11
+ypos 829
+}
+Dot {
+name Dot9
+tile_color 0x4b5ec600
+xpos 23
+ypos 910
+}
+set Na84e400 [stack 0]
+Dot {
+name Dot10
+tile_color 0x4b5ec600
+xpos 175
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)*-1}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform6
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 1061
+}
+push $Na84e400
+Dot {
+name Dot11
+tile_color 0x4b5ec600
+xpos -127
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform7
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 1015
+}
+push $Na84e400
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge3
+xpos -11
+ypos 1021
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge4
+xpos -11
+ypos 1061
+}
+push $Na17fc00
+Dot {
+name Dot13
+tile_color 0xcccccc00
+xpos -290
+ypos -160
+}
+Dot {
+name Dot12
+tile_color 0xcccccc00
+xpos -290
+ypos 1261
+}
+NodeWrapper {
+inputs 2+1
+channels rgba
+name NodeWrapper1
+xpos -11
+ypos 1257
+}
+Output {
+name Output1
+xpos -11
+ypos 1389
+}
+NoOp {
+inputs 0
+name exp
+label "The growth doesn't look visually linear. \nUsing curves helps a little."
+xpos 396
+ypos 766
+addUserKnob {20 User}
+addUserKnob {7 expo}
+expo {{parent.size>0?positive_curve:negative_curve i}}
+addUserKnob {7 positive_curve}
+positive_curve {{curve 0 0.1037476063 0.1683235168 0.2209408283 0.2831250429 0.3357424736 0.3954704404 0.4731256962 0.5778000951 0.762029767 1}}
+addUserKnob {7 negative_curve}
+negative_curve {{curve 0 0.2209040523 0.3736710192 0.4841623592 0.5752981992 0.6541623592 0.7271137492 0.8043368459 0.8681262732 0.9249737263 1}}
+}
+end_group
+Defocus {
+defocus 0
+name Defocus_RED
+xpos -1711
+ypos 349
+}
+Dot {
+name Dot88
+xpos -1677
+ypos 499
+}
+push $Na17f400
+Dot {
+name Dot89
+xpos -1364
+ypos 101
+}
+Shuffle2 {
+fromInput1 {
+{0}
+B
+}
+fromInput2 {
+{0}
+B
+}
+mappings "4 black -1 -1 rgba.red 0 0 black -1 -1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 rgba.blue 0 2 rgba.alpha 0 3"
+name Shuffle25
+label Blue
+xpos -1398
+ypos 184
+}
+Group {
+name Erode_Fine_BLUE_Output
+help "Erode an image with fine controls, as opposed to Nuke's default erode node."
+tile_color 0xef7033ff
+label "\[value size]"
+note_font "DejaVu Sans"
+xpos -1398
+ypos 262
+addUserKnob {20 erode_fine l "Fine Erode"}
+addUserKnob {41 channels T NodeWrapper1.channels}
+addUserKnob {26 ""}
+addUserKnob {6 round_filter l "Round Filter" t "Erode the image with a round Filter (well, it's more of a dodecagon... but... you know..) instead of a square filter." +STARTLINE}
+addUserKnob {7 size l Size t "Amount of erode/dilate. Positive values will grow the image, negative values will shrink it." R -10 10}
+addUserKnob {26 ""}
+addUserKnob {41 maskChannelInput l mask T NodeWrapper1.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T NodeWrapper1.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T NodeWrapper1.invert_mask}
+addUserKnob {41 fringe -STARTLINE T NodeWrapper1.fringe}
+addUserKnob {41 mix T NodeWrapper1.mix}
+addUserKnob {26 spin_copyright_div l "" +STARTLINE}
+addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nErode_Fine\nVersion 1.0\n2018" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.0 - 2018 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x75667fff
+label "round dilate trick"
+note_font_size 40
+xpos 212
+ypos -67
+bdwidth 299
+bdheight 618
+}
+Input {
+inputs 0
+name Inputmask
+xpos 251
+ypos 1257
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos -11
+ypos -243
+}
+Dot {
+name Dot15
+tile_color 0xcccccc00
+xpos 22
+ypos -160
+}
+set N3967c800 [stack 0]
+Dot {
+name Dot3
+tile_color 0xcccccc00
+xpos 23
+ypos 33
+}
+set N3967cc00 [stack 0]
+Dot {
+name Dot1
+tile_color 0xcccccc00
+xpos 296
+ypos 33
+}
+set N3967d000 [stack 0]
+Dot {
+name Dot2
+tile_color 0xcccccc00
+xpos 415
+ypos 33
+}
+AdjBBox {
+numpixels {{abs(ceil(parent.size)*1.4)+2}}
+name AdjBBox1
+xpos 381
+ypos 100
+}
+Dot {
+name Dot4
+tile_color 0xcccccc00
+xpos 415
+ypos 422
+}
+push $N3967d000
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 >= 1)"}}
+name Dilate1
+label "size \[value size]"
+xpos 262
+ypos 97
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform1
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 147
+}
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 == 2)"}}
+name Dilate2
+label "size \[value size]"
+xpos 262
+ypos 185
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform2
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 235
+}
+Dilate {
+size {{int(parent.size)//3}}
+name Dilate3
+label "size \[value size]"
+xpos 262
+ypos 273
+}
+Transform {
+rotate -60
+shutteroffset centred
+name Transform3
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 323
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 262
+ypos 418
+}
+push $N3967cc00
+Dilate {
+size {{int(parent.size)}}
+name Dilate4
+label "size \[value size]"
+xpos -11
+ypos 97
+}
+Dot {
+name Dot14
+tile_color 0xcccccc00
+xpos 23
+ypos 491
+}
+set N3967dc00 [stack 0]
+Dissolve {
+inputs 2
+which {{clamp(abs(parent.size))}}
+name Dissolve1
+xpos 262
+ypos 481
+}
+Dot {
+name Dot5
+tile_color 0xcccccc00
+xpos 296
+ypos 539
+}
+push $N3967dc00
+Switch {
+inputs 2
+which {{parent.round_filter}}
+name Switch1
+xpos -11
+ypos 535
+}
+AdjBBox {
+numpixels 1
+name AdjBBox2
+xpos -11
+ypos 609
+}
+Dot {
+name Dot6
+tile_color 0xcccccc00
+xpos 23
+ypos 678
+}
+set N30400400 [stack 0]
+Dot {
+name Dot8
+tile_color 0xcccccc00
+xpos 175
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10)*-1} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform5
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 823
+}
+push $N30400400
+Dot {
+name Dot7
+tile_color 0xcccccc00
+xpos -127
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10) i} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform4
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 783
+}
+push $N30400400
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge2
+xpos -11
+ypos 789
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge1
+xpos -11
+ypos 829
+}
+Dot {
+name Dot9
+tile_color 0x4b5ec600
+xpos 23
+ypos 910
+}
+set N30401000 [stack 0]
+Dot {
+name Dot10
+tile_color 0x4b5ec600
+xpos 175
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)*-1}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform6
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 1061
+}
+push $N30401000
+Dot {
+name Dot11
+tile_color 0x4b5ec600
+xpos -127
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform7
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 1015
+}
+push $N30401000
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge3
+xpos -11
+ypos 1021
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge4
+xpos -11
+ypos 1061
+}
+push $N3967c800
+Dot {
+name Dot13
+tile_color 0xcccccc00
+xpos -290
+ypos -160
+}
+Dot {
+name Dot12
+tile_color 0xcccccc00
+xpos -290
+ypos 1261
+}
+NodeWrapper {
+inputs 2+1
+channels rgba
+name NodeWrapper1
+xpos -11
+ypos 1257
+}
+Output {
+name Output1
+xpos -11
+ypos 1389
+}
+NoOp {
+inputs 0
+name exp
+label "The growth doesn't look visually linear. \nUsing curves helps a little."
+xpos 396
+ypos 766
+addUserKnob {20 User}
+addUserKnob {7 expo}
+expo {{parent.size>0?positive_curve:negative_curve i}}
+addUserKnob {7 positive_curve}
+positive_curve {{curve 0 0.1037476063 0.1683235168 0.2209408283 0.2831250429 0.3357424736 0.3954704404 0.4731256962 0.5778000951 0.762029767 1}}
+addUserKnob {7 negative_curve}
+negative_curve {{curve 0 0.2209040523 0.3736710192 0.4841623592 0.5752981992 0.6541623592 0.7271137492 0.8043368459 0.8681262732 0.9249737263 1}}
+}
+end_group
+Defocus {
+defocus 0
+name Defocus_BLUE
+xpos -1398
+ypos 351
+}
+Dot {
+name Dot90
+xpos -1364
+ypos 434
+}
+push $Na17f400
+Shuffle2 {
+fromInput1 {
+{0}
+B
+}
+fromInput2 {
+{0}
+B
+}
+mappings "4 black -1 -1 rgba.red 0 0 black -1 -1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 rgba.green 0 1 rgba.alpha 0 3"
+name Shuffle26
+label Green
+xpos -1546
+ypos 185
+}
+Group {
+name Erode_Fine_GREEN_Output
+help "Erode an image with fine controls, as opposed to Nuke's default erode node."
+tile_color 0xef7033ff
+label "\[value size]"
+note_font "DejaVu Sans"
+xpos -1546
+ypos 261
+addUserKnob {20 erode_fine l "Fine Erode"}
+addUserKnob {41 channels T NodeWrapper1.channels}
+addUserKnob {26 ""}
+addUserKnob {6 round_filter l "Round Filter" t "Erode the image with a round Filter (well, it's more of a dodecagon... but... you know..) instead of a square filter." +STARTLINE}
+addUserKnob {7 size l Size t "Amount of erode/dilate. Positive values will grow the image, negative values will shrink it." R -10 10}
+addUserKnob {26 ""}
+addUserKnob {41 maskChannelInput l mask T NodeWrapper1.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T NodeWrapper1.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T NodeWrapper1.invert_mask}
+addUserKnob {41 fringe -STARTLINE T NodeWrapper1.fringe}
+addUserKnob {41 mix T NodeWrapper1.mix}
+addUserKnob {26 spin_copyright_div l "" +STARTLINE}
+addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nErode_Fine\nVersion 1.0\n2018" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.0 - 2018 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x75667fff
+label "round dilate trick"
+note_font_size 40
+xpos 212
+ypos -67
+bdwidth 299
+bdheight 618
+}
+Input {
+inputs 0
+name Inputmask
+xpos 251
+ypos 1257
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos -11
+ypos -243
+}
+Dot {
+name Dot15
+tile_color 0xcccccc00
+xpos 22
+ypos -160
+}
+set N6170b000 [stack 0]
+Dot {
+name Dot3
+tile_color 0xcccccc00
+xpos 23
+ypos 33
+}
+set N6170b400 [stack 0]
+Dot {
+name Dot1
+tile_color 0xcccccc00
+xpos 296
+ypos 33
+}
+set N6170b800 [stack 0]
+Dot {
+name Dot2
+tile_color 0xcccccc00
+xpos 415
+ypos 33
+}
+AdjBBox {
+numpixels {{abs(ceil(parent.size)*1.4)+2}}
+name AdjBBox1
+xpos 381
+ypos 100
+}
+Dot {
+name Dot4
+tile_color 0xcccccc00
+xpos 415
+ypos 422
+}
+push $N6170b800
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 >= 1)"}}
+name Dilate1
+label "size \[value size]"
+xpos 262
+ypos 97
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform1
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 147
+}
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 == 2)"}}
+name Dilate2
+label "size \[value size]"
+xpos 262
+ypos 185
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform2
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 235
+}
+Dilate {
+size {{int(parent.size)//3}}
+name Dilate3
+label "size \[value size]"
+xpos 262
+ypos 273
+}
+Transform {
+rotate -60
+shutteroffset centred
+name Transform3
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 323
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 262
+ypos 418
+}
+push $N6170b400
+Dilate {
+size {{int(parent.size)}}
+name Dilate4
+label "size \[value size]"
+xpos -11
+ypos 97
+}
+Dot {
+name Dot14
+tile_color 0xcccccc00
+xpos 23
+ypos 491
+}
+set N7420a400 [stack 0]
+Dissolve {
+inputs 2
+which {{clamp(abs(parent.size))}}
+name Dissolve1
+xpos 262
+ypos 481
+}
+Dot {
+name Dot5
+tile_color 0xcccccc00
+xpos 296
+ypos 539
+}
+push $N7420a400
+Switch {
+inputs 2
+which {{parent.round_filter}}
+name Switch1
+xpos -11
+ypos 535
+}
+AdjBBox {
+numpixels 1
+name AdjBBox2
+xpos -11
+ypos 609
+}
+Dot {
+name Dot6
+tile_color 0xcccccc00
+xpos 23
+ypos 678
+}
+set N7420ac00 [stack 0]
+Dot {
+name Dot8
+tile_color 0xcccccc00
+xpos 175
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10)*-1} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform5
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 823
+}
+push $N7420ac00
+Dot {
+name Dot7
+tile_color 0xcccccc00
+xpos -127
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10) i} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform4
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 783
+}
+push $N7420ac00
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge2
+xpos -11
+ypos 789
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge1
+xpos -11
+ypos 829
+}
+Dot {
+name Dot9
+tile_color 0x4b5ec600
+xpos 23
+ypos 910
+}
+set N7420b800 [stack 0]
+Dot {
+name Dot10
+tile_color 0x4b5ec600
+xpos 175
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)*-1}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform6
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 1061
+}
+push $N7420b800
+Dot {
+name Dot11
+tile_color 0x4b5ec600
+xpos -127
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform7
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 1015
+}
+push $N7420b800
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge3
+xpos -11
+ypos 1021
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge4
+xpos -11
+ypos 1061
+}
+push $N6170b000
+Dot {
+name Dot13
+tile_color 0xcccccc00
+xpos -290
+ypos -160
+}
+Dot {
+name Dot12
+tile_color 0xcccccc00
+xpos -290
+ypos 1261
+}
+NodeWrapper {
+inputs 2+1
+channels rgba
+name NodeWrapper1
+xpos -11
+ypos 1257
+}
+Output {
+name Output1
+xpos -11
+ypos 1389
+}
+NoOp {
+inputs 0
+name exp
+label "The growth doesn't look visually linear. \nUsing curves helps a little."
+xpos 396
+ypos 766
+addUserKnob {20 User}
+addUserKnob {7 expo}
+expo {{parent.size>0?positive_curve:negative_curve i}}
+addUserKnob {7 positive_curve}
+positive_curve {{curve 0 0.1037476063 0.1683235168 0.2209408283 0.2831250429 0.3357424736 0.3954704404 0.4731256962 0.5778000951 0.762029767 1}}
+addUserKnob {7 negative_curve}
+negative_curve {{curve 0 0.2209040523 0.3736710192 0.4841623592 0.5752981992 0.6541623592 0.7271137492 0.8043368459 0.8681262732 0.9249737263 1}}
+}
+end_group
+Defocus {
+defocus 0
+name Defocus_GREEN
+xpos -1546
+ypos 351
+}
+Merge2 {
+inputs 2
+operation max
+name Max12
+label "bbox: \[value bbox]"
+xpos -1546
+ypos 425
+}
+Merge2 {
+inputs 2
+operation max
+name Max13
+label "bbox: \[value bbox]"
+xpos -1546
+ypos 490
+}
+Defocus {
+defocus 0
+name Defocus_ALL
+xpos -1546
+ypos 587
+}
+Dot {
+name Dot97
+xpos -1512
+ypos 1054
+}
+push $Na17f000
+Dot {
+name Dot99
+xpos -868
+ypos -178
+}
+Dot {
+name Dot91
+xpos -868
+ypos 98
+}
+set N33e8bc00 [stack 0]
+Dot {
+name Dot92
+xpos -1025
+ypos 98
+}
+Shuffle2 {
+fromInput1 {
+{0}
+B
+}
+fromInput2 {
+{0}
+B
+}
+mappings "4 black -1 -1 rgba.red 0 0 black -1 -1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 rgba.red 0 0 rgba.alpha 0 3"
+name Shuffle27
+label Red
+xpos -1059
+ypos 179
+}
+Group {
+name Erode_Fine_RED_Input
+help "Erode an image with fine controls, as opposed to Nuke's default erode node."
+tile_color 0xef7033ff
+label "\[value size]"
+note_font "DejaVu Sans"
+xpos -1059
+ypos 263
+addUserKnob {20 erode_fine l "Fine Erode"}
+addUserKnob {41 channels T NodeWrapper1.channels}
+addUserKnob {26 ""}
+addUserKnob {6 round_filter l "Round Filter" t "Erode the image with a round Filter (well, it's more of a dodecagon... but... you know..) instead of a square filter." +STARTLINE}
+addUserKnob {7 size l Size t "Amount of erode/dilate. Positive values will grow the image, negative values will shrink it." R -10 10}
+addUserKnob {26 ""}
+addUserKnob {41 maskChannelInput l mask T NodeWrapper1.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T NodeWrapper1.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T NodeWrapper1.invert_mask}
+addUserKnob {41 fringe -STARTLINE T NodeWrapper1.fringe}
+addUserKnob {41 mix T NodeWrapper1.mix}
+addUserKnob {26 spin_copyright_div l "" +STARTLINE}
+addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nErode_Fine\nVersion 1.0\n2018" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.0 - 2018 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x75667fff
+label "round dilate trick"
+note_font_size 40
+xpos 212
+ypos -67
+bdwidth 299
+bdheight 618
+}
+Input {
+inputs 0
+name Inputmask
+xpos 251
+ypos 1257
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos -11
+ypos -243
+}
+Dot {
+name Dot15
+tile_color 0xcccccc00
+xpos 22
+ypos -160
+}
+set Nf54c0400 [stack 0]
+Dot {
+name Dot3
+tile_color 0xcccccc00
+xpos 23
+ypos 33
+}
+set Nf54c0800 [stack 0]
+Dot {
+name Dot1
+tile_color 0xcccccc00
+xpos 296
+ypos 33
+}
+set Nf54c0c00 [stack 0]
+Dot {
+name Dot2
+tile_color 0xcccccc00
+xpos 415
+ypos 33
+}
+AdjBBox {
+numpixels {{abs(ceil(parent.size)*1.4)+2}}
+name AdjBBox1
+xpos 381
+ypos 100
+}
+Dot {
+name Dot4
+tile_color 0xcccccc00
+xpos 415
+ypos 422
+}
+push $Nf54c0c00
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 >= 1)"}}
+name Dilate1
+label "size \[value size]"
+xpos 262
+ypos 97
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform1
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 147
+}
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 == 2)"}}
+name Dilate2
+label "size \[value size]"
+xpos 262
+ypos 185
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform2
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 235
+}
+Dilate {
+size {{int(parent.size)//3}}
+name Dilate3
+label "size \[value size]"
+xpos 262
+ypos 273
+}
+Transform {
+rotate -60
+shutteroffset centred
+name Transform3
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 323
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 262
+ypos 418
+}
+push $Nf54c0800
+Dilate {
+size {{int(parent.size)}}
+name Dilate4
+label "size \[value size]"
+xpos -11
+ypos 97
+}
+Dot {
+name Dot14
+tile_color 0xcccccc00
+xpos 23
+ypos 491
+}
+set Nf54c1800 [stack 0]
+Dissolve {
+inputs 2
+which {{clamp(abs(parent.size))}}
+name Dissolve1
+xpos 262
+ypos 481
+}
+Dot {
+name Dot5
+tile_color 0xcccccc00
+xpos 296
+ypos 539
+}
+push $Nf54c1800
+Switch {
+inputs 2
+which {{parent.round_filter}}
+name Switch1
+xpos -11
+ypos 535
+}
+AdjBBox {
+numpixels 1
+name AdjBBox2
+xpos -11
+ypos 609
+}
+Dot {
+name Dot6
+tile_color 0xcccccc00
+xpos 23
+ypos 678
+}
+set Nef67e000 [stack 0]
+Dot {
+name Dot8
+tile_color 0xcccccc00
+xpos 175
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10)*-1} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform5
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 823
+}
+push $Nef67e000
+Dot {
+name Dot7
+tile_color 0xcccccc00
+xpos -127
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10) i} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform4
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 783
+}
+push $Nef67e000
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge2
+xpos -11
+ypos 789
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge1
+xpos -11
+ypos 829
+}
+Dot {
+name Dot9
+tile_color 0x4b5ec600
+xpos 23
+ypos 910
+}
+set Nef67ec00 [stack 0]
+Dot {
+name Dot10
+tile_color 0x4b5ec600
+xpos 175
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)*-1}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform6
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 1061
+}
+push $Nef67ec00
+Dot {
+name Dot11
+tile_color 0x4b5ec600
+xpos -127
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform7
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 1015
+}
+push $Nef67ec00
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge3
+xpos -11
+ypos 1021
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge4
+xpos -11
+ypos 1061
+}
+push $Nf54c0400
+Dot {
+name Dot13
+tile_color 0xcccccc00
+xpos -290
+ypos -160
+}
+Dot {
+name Dot12
+tile_color 0xcccccc00
+xpos -290
+ypos 1261
+}
+NodeWrapper {
+inputs 2+1
+channels rgba
+name NodeWrapper1
+xpos -11
+ypos 1257
+}
+Output {
+name Output1
+xpos -11
+ypos 1389
+}
+NoOp {
+inputs 0
+name exp
+label "The growth doesn't look visually linear. \nUsing curves helps a little."
+xpos 396
+ypos 766
+addUserKnob {20 User}
+addUserKnob {7 expo}
+expo {{parent.size>0?positive_curve:negative_curve i}}
+addUserKnob {7 positive_curve}
+positive_curve {{curve 0 0.1037476063 0.1683235168 0.2209408283 0.2831250429 0.3357424736 0.3954704404 0.4731256962 0.5778000951 0.762029767 1}}
+addUserKnob {7 negative_curve}
+negative_curve {{curve 0 0.2209040523 0.3736710192 0.4841623592 0.5752981992 0.6541623592 0.7271137492 0.8043368459 0.8681262732 0.9249737263 1}}
+}
+end_group
+Dot {
+name Dot93
+xpos -1025
+ypos 492
+}
+push $N33e8bc00
+Dot {
+name Dot94
+xpos -719
+ypos 98
+}
+Shuffle2 {
+fromInput1 {
+{0}
+B
+}
+fromInput2 {
+{0}
+B
+}
+mappings "4 black -1 -1 rgba.red 0 0 black -1 -1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 rgba.blue 0 2 rgba.alpha 0 3"
+name Shuffle28
+label Blue
+xpos -753
+ypos 177
+}
+Group {
+name Erode_Fine_BLUE_Input
+help "Erode an image with fine controls, as opposed to Nuke's default erode node."
+tile_color 0xef7033ff
+label "\[value size]"
+note_font "DejaVu Sans"
+xpos -753
+ypos 264
+addUserKnob {20 erode_fine l "Fine Erode"}
+addUserKnob {41 channels T NodeWrapper1.channels}
+addUserKnob {26 ""}
+addUserKnob {6 round_filter l "Round Filter" t "Erode the image with a round Filter (well, it's more of a dodecagon... but... you know..) instead of a square filter." +STARTLINE}
+addUserKnob {7 size l Size t "Amount of erode/dilate. Positive values will grow the image, negative values will shrink it." R -10 10}
+addUserKnob {26 ""}
+addUserKnob {41 maskChannelInput l mask T NodeWrapper1.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T NodeWrapper1.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T NodeWrapper1.invert_mask}
+addUserKnob {41 fringe -STARTLINE T NodeWrapper1.fringe}
+addUserKnob {41 mix T NodeWrapper1.mix}
+addUserKnob {26 spin_copyright_div l "" +STARTLINE}
+addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nErode_Fine\nVersion 1.0\n2018" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.0 - 2018 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x75667fff
+label "round dilate trick"
+note_font_size 40
+xpos 212
+ypos -67
+bdwidth 299
+bdheight 618
+}
+Input {
+inputs 0
+name Inputmask
+xpos 251
+ypos 1257
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos -11
+ypos -243
+}
+Dot {
+name Dot15
+tile_color 0xcccccc00
+xpos 22
+ypos -160
+}
+set Nfbe67000 [stack 0]
+Dot {
+name Dot3
+tile_color 0xcccccc00
+xpos 23
+ypos 33
+}
+set Nfbe67400 [stack 0]
+Dot {
+name Dot1
+tile_color 0xcccccc00
+xpos 296
+ypos 33
+}
+set Nfbe67800 [stack 0]
+Dot {
+name Dot2
+tile_color 0xcccccc00
+xpos 415
+ypos 33
+}
+AdjBBox {
+numpixels {{abs(ceil(parent.size)*1.4)+2}}
+name AdjBBox1
+xpos 381
+ypos 100
+}
+Dot {
+name Dot4
+tile_color 0xcccccc00
+xpos 415
+ypos 422
+}
+push $Nfbe67800
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 >= 1)"}}
+name Dilate1
+label "size \[value size]"
+xpos 262
+ypos 97
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform1
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 147
+}
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 == 2)"}}
+name Dilate2
+label "size \[value size]"
+xpos 262
+ypos 185
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform2
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 235
+}
+Dilate {
+size {{int(parent.size)//3}}
+name Dilate3
+label "size \[value size]"
+xpos 262
+ypos 273
+}
+Transform {
+rotate -60
+shutteroffset centred
+name Transform3
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 323
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 262
+ypos 418
+}
+push $Nfbe67400
+Dilate {
+size {{int(parent.size)}}
+name Dilate4
+label "size \[value size]"
+xpos -11
+ypos 97
+}
+Dot {
+name Dot14
+tile_color 0xcccccc00
+xpos 23
+ypos 491
+}
+set Nfe616400 [stack 0]
+Dissolve {
+inputs 2
+which {{clamp(abs(parent.size))}}
+name Dissolve1
+xpos 262
+ypos 481
+}
+Dot {
+name Dot5
+tile_color 0xcccccc00
+xpos 296
+ypos 539
+}
+push $Nfe616400
+Switch {
+inputs 2
+which {{parent.round_filter}}
+name Switch1
+xpos -11
+ypos 535
+}
+AdjBBox {
+numpixels 1
+name AdjBBox2
+xpos -11
+ypos 609
+}
+Dot {
+name Dot6
+tile_color 0xcccccc00
+xpos 23
+ypos 678
+}
+set Nfe616c00 [stack 0]
+Dot {
+name Dot8
+tile_color 0xcccccc00
+xpos 175
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10)*-1} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform5
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 823
+}
+push $Nfe616c00
+Dot {
+name Dot7
+tile_color 0xcccccc00
+xpos -127
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10) i} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform4
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 783
+}
+push $Nfe616c00
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge2
+xpos -11
+ypos 789
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge1
+xpos -11
+ypos 829
+}
+Dot {
+name Dot9
+tile_color 0x4b5ec600
+xpos 23
+ypos 910
+}
+set Nfe617800 [stack 0]
+Dot {
+name Dot10
+tile_color 0x4b5ec600
+xpos 175
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)*-1}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform6
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 1061
+}
+push $Nfe617800
+Dot {
+name Dot11
+tile_color 0x4b5ec600
+xpos -127
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform7
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 1015
+}
+push $Nfe617800
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge3
+xpos -11
+ypos 1021
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge4
+xpos -11
+ypos 1061
+}
+push $Nfbe67000
+Dot {
+name Dot13
+tile_color 0xcccccc00
+xpos -290
+ypos -160
+}
+Dot {
+name Dot12
+tile_color 0xcccccc00
+xpos -290
+ypos 1261
+}
+NodeWrapper {
+inputs 2+1
+channels rgba
+name NodeWrapper1
+xpos -11
+ypos 1257
+}
+Output {
+name Output1
+xpos -11
+ypos 1389
+}
+NoOp {
+inputs 0
+name exp
+label "The growth doesn't look visually linear. \nUsing curves helps a little."
+xpos 396
+ypos 766
+addUserKnob {20 User}
+addUserKnob {7 expo}
+expo {{parent.size>0?positive_curve:negative_curve i}}
+addUserKnob {7 positive_curve}
+positive_curve {{curve 0 0.1037476063 0.1683235168 0.2209408283 0.2831250429 0.3357424736 0.3954704404 0.4731256962 0.5778000951 0.762029767 1}}
+addUserKnob {7 negative_curve}
+negative_curve {{curve 0 0.2209040523 0.3736710192 0.4841623592 0.5752981992 0.6541623592 0.7271137492 0.8043368459 0.8681262732 0.9249737263 1}}
+}
+end_group
+Dot {
+name Dot95
+xpos -719
+ypos 427
+}
+push $N33e8bc00
+Shuffle2 {
+fromInput1 {
+{0}
+B
+}
+fromInput2 {
+{0}
+B
+}
+mappings "4 black -1 -1 rgba.red 0 0 black -1 -1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 rgba.green 0 1 rgba.alpha 0 3"
+name Shuffle29
+label Green
+xpos -902
+ypos 178
+}
+Group {
+name Erode_Fine_GREEN_Input
+help "Erode an image with fine controls, as opposed to Nuke's default erode node."
+tile_color 0xef7033ff
+label "\[value size]"
+note_font "DejaVu Sans"
+xpos -902
+ypos 262
+addUserKnob {20 erode_fine l "Fine Erode"}
+addUserKnob {41 channels T NodeWrapper1.channels}
+addUserKnob {26 ""}
+addUserKnob {6 round_filter l "Round Filter" t "Erode the image with a round Filter (well, it's more of a dodecagon... but... you know..) instead of a square filter." +STARTLINE}
+addUserKnob {7 size l Size t "Amount of erode/dilate. Positive values will grow the image, negative values will shrink it." R -10 10}
+addUserKnob {26 ""}
+addUserKnob {41 maskChannelInput l mask T NodeWrapper1.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T NodeWrapper1.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T NodeWrapper1.invert_mask}
+addUserKnob {41 fringe -STARTLINE T NodeWrapper1.fringe}
+addUserKnob {41 mix T NodeWrapper1.mix}
+addUserKnob {26 spin_copyright_div l "" +STARTLINE}
+addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nErode_Fine\nVersion 1.0\n2018" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.0 - 2018 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x75667fff
+label "round dilate trick"
+note_font_size 40
+xpos 212
+ypos -67
+bdwidth 299
+bdheight 618
+}
+Input {
+inputs 0
+name Inputmask
+xpos 251
+ypos 1257
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos -11
+ypos -243
+}
+Dot {
+name Dot15
+tile_color 0xcccccc00
+xpos 22
+ypos -160
+}
+set N4bc87800 [stack 0]
+Dot {
+name Dot3
+tile_color 0xcccccc00
+xpos 23
+ypos 33
+}
+set N4bc87c00 [stack 0]
+Dot {
+name Dot1
+tile_color 0xcccccc00
+xpos 296
+ypos 33
+}
+set N198ce000 [stack 0]
+Dot {
+name Dot2
+tile_color 0xcccccc00
+xpos 415
+ypos 33
+}
+AdjBBox {
+numpixels {{abs(ceil(parent.size)*1.4)+2}}
+name AdjBBox1
+xpos 381
+ypos 100
+}
+Dot {
+name Dot4
+tile_color 0xcccccc00
+xpos 415
+ypos 422
+}
+push $N198ce000
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 >= 1)"}}
+name Dilate1
+label "size \[value size]"
+xpos 262
+ypos 97
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform1
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 147
+}
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 == 2)"}}
+name Dilate2
+label "size \[value size]"
+xpos 262
+ypos 185
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform2
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 235
+}
+Dilate {
+size {{int(parent.size)//3}}
+name Dilate3
+label "size \[value size]"
+xpos 262
+ypos 273
+}
+Transform {
+rotate -60
+shutteroffset centred
+name Transform3
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 323
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 262
+ypos 418
+}
+push $N4bc87c00
+Dilate {
+size {{int(parent.size)}}
+name Dilate4
+label "size \[value size]"
+xpos -11
+ypos 97
+}
+Dot {
+name Dot14
+tile_color 0xcccccc00
+xpos 23
+ypos 491
+}
+set N198cec00 [stack 0]
+Dissolve {
+inputs 2
+which {{clamp(abs(parent.size))}}
+name Dissolve1
+xpos 262
+ypos 481
+}
+Dot {
+name Dot5
+tile_color 0xcccccc00
+xpos 296
+ypos 539
+}
+push $N198cec00
+Switch {
+inputs 2
+which {{parent.round_filter}}
+name Switch1
+xpos -11
+ypos 535
+}
+AdjBBox {
+numpixels 1
+name AdjBBox2
+xpos -11
+ypos 609
+}
+Dot {
+name Dot6
+tile_color 0xcccccc00
+xpos 23
+ypos 678
+}
+set N198cf400 [stack 0]
+Dot {
+name Dot8
+tile_color 0xcccccc00
+xpos 175
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10)*-1} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform5
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 823
+}
+push $N198cf400
+Dot {
+name Dot7
+tile_color 0xcccccc00
+xpos -127
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10) i} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform4
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 783
+}
+push $N198cf400
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge2
+xpos -11
+ypos 789
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge1
+xpos -11
+ypos 829
+}
+Dot {
+name Dot9
+tile_color 0x4b5ec600
+xpos 23
+ypos 910
+}
+set N6f6d8000 [stack 0]
+Dot {
+name Dot10
+tile_color 0x4b5ec600
+xpos 175
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)*-1}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform6
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 1061
+}
+push $N6f6d8000
+Dot {
+name Dot11
+tile_color 0x4b5ec600
+xpos -127
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform7
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 1015
+}
+push $N6f6d8000
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge3
+xpos -11
+ypos 1021
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge4
+xpos -11
+ypos 1061
+}
+push $N4bc87800
+Dot {
+name Dot13
+tile_color 0xcccccc00
+xpos -290
+ypos -160
+}
+Dot {
+name Dot12
+tile_color 0xcccccc00
+xpos -290
+ypos 1261
+}
+NodeWrapper {
+inputs 2+1
+channels rgba
+name NodeWrapper1
+xpos -11
+ypos 1257
+}
+Output {
+name Output1
+xpos -11
+ypos 1389
+}
+NoOp {
+inputs 0
+name exp
+label "The growth doesn't look visually linear. \nUsing curves helps a little."
+xpos 396
+ypos 766
+addUserKnob {20 User}
+addUserKnob {7 expo}
+expo {{parent.size>0?positive_curve:negative_curve i}}
+addUserKnob {7 positive_curve}
+positive_curve {{curve 0 0.1037476063 0.1683235168 0.2209408283 0.2831250429 0.3357424736 0.3954704404 0.4731256962 0.5778000951 0.762029767 1}}
+addUserKnob {7 negative_curve}
+negative_curve {{curve 0 0.2209040523 0.3736710192 0.4841623592 0.5752981992 0.6541623592 0.7271137492 0.8043368459 0.8681262732 0.9249737263 1}}
+}
+end_group
+Merge2 {
+inputs 2
+operation max
+name Max14
+label "bbox: \[value bbox]"
+xpos -902
+ypos 418
+}
+Merge2 {
+inputs 2
+operation max
+name Max15
+label "bbox: \[value bbox]"
+xpos -902
+ypos 483
+}
+Dot {
+name Dot96
+xpos -868
+ypos 795
+}
+Group {
+name Erode_Fine_ALL_Input
+help "Erode an image with fine controls, as opposed to Nuke's default erode node."
+tile_color 0xef7033ff
+label "\[value size]"
+note_font "DejaVu Sans"
+xpos -637
+ypos 781
+addUserKnob {20 erode_fine l "Fine Erode"}
+addUserKnob {41 channels T NodeWrapper1.channels}
+addUserKnob {26 ""}
+addUserKnob {6 round_filter l "Round Filter" t "Erode the image with a round Filter (well, it's more of a dodecagon... but... you know..) instead of a square filter." +STARTLINE}
+addUserKnob {7 size l Size t "Amount of erode/dilate. Positive values will grow the image, negative values will shrink it." R -10 10}
+addUserKnob {26 ""}
+addUserKnob {41 maskChannelInput l mask T NodeWrapper1.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T NodeWrapper1.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T NodeWrapper1.invert_mask}
+addUserKnob {41 fringe -STARTLINE T NodeWrapper1.fringe}
+addUserKnob {41 mix T NodeWrapper1.mix}
+addUserKnob {26 spin_copyright_div l "" +STARTLINE}
+addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nErode_Fine\nVersion 1.0\n2018" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.0 - 2018 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x75667fff
+label "round dilate trick"
+note_font_size 40
+xpos 212
+ypos -67
+bdwidth 299
+bdheight 618
+}
+Input {
+inputs 0
+name Inputmask
+xpos 251
+ypos 1257
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos -11
+ypos -243
+}
+Dot {
+name Dot15
+tile_color 0xcccccc00
+xpos 22
+ypos -160
+}
+set N52162000 [stack 0]
+Dot {
+name Dot3
+tile_color 0xcccccc00
+xpos 23
+ypos 33
+}
+set N52162400 [stack 0]
+Dot {
+name Dot1
+tile_color 0xcccccc00
+xpos 296
+ypos 33
+}
+set N52162800 [stack 0]
+Dot {
+name Dot2
+tile_color 0xcccccc00
+xpos 415
+ypos 33
+}
+AdjBBox {
+numpixels {{abs(ceil(parent.size)*1.4)+2}}
+name AdjBBox1
+xpos 381
+ypos 100
+}
+Dot {
+name Dot4
+tile_color 0xcccccc00
+xpos 415
+ypos 422
+}
+push $N52162800
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 >= 1)"}}
+name Dilate1
+label "size \[value size]"
+xpos 262
+ypos 97
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform1
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 147
+}
+Dilate {
+size {{"int(parent.size)//3 + (int(parent.size)%3 == 2)"}}
+name Dilate2
+label "size \[value size]"
+xpos 262
+ypos 185
+}
+Transform {
+rotate 30
+shutteroffset centred
+name Transform2
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 235
+}
+Dilate {
+size {{int(parent.size)//3}}
+name Dilate3
+label "size \[value size]"
+xpos 262
+ypos 273
+}
+Transform {
+rotate -60
+shutteroffset centred
+name Transform3
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 262
+ypos 323
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 262
+ypos 418
+}
+push $N52162400
+Dilate {
+size {{int(parent.size)}}
+name Dilate4
+label "size \[value size]"
+xpos -11
+ypos 97
+}
+Dot {
+name Dot14
+tile_color 0xcccccc00
+xpos 23
+ypos 491
+}
+set N52163400 [stack 0]
+Dissolve {
+inputs 2
+which {{clamp(abs(parent.size))}}
+name Dissolve1
+xpos 262
+ypos 481
+}
+Dot {
+name Dot5
+tile_color 0xcccccc00
+xpos 296
+ypos 539
+}
+push $N52163400
+Switch {
+inputs 2
+which {{parent.round_filter}}
+name Switch1
+xpos -11
+ypos 535
+}
+AdjBBox {
+numpixels 1
+name AdjBBox2
+xpos -11
+ypos 609
+}
+Dot {
+name Dot6
+tile_color 0xcccccc00
+xpos 23
+ypos 678
+}
+set N52163c00 [stack 0]
+Dot {
+name Dot8
+tile_color 0xcccccc00
+xpos 175
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10)*-1} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform5
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 823
+}
+push $N52163c00
+Dot {
+name Dot7
+tile_color 0xcccccc00
+xpos -127
+ypos 678
+}
+Transform {
+translate {{exp.expo(abs(parent.size-int(parent.size))*10) i} 0}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform4
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 783
+}
+push $N52163c00
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge2
+xpos -11
+ypos 789
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge1
+xpos -11
+ypos 829
+}
+Dot {
+name Dot9
+tile_color 0x4b5ec600
+xpos 23
+ypos 910
+}
+set N96224800 [stack 0]
+Dot {
+name Dot10
+tile_color 0x4b5ec600
+xpos 175
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)*-1}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform6
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos 141
+ypos 1061
+}
+push $N96224800
+Dot {
+name Dot11
+tile_color 0x4b5ec600
+xpos -127
+ypos 910
+}
+Transform {
+translate {0 {exp.expo(abs(parent.size-int(parent.size))*10)}}
+center {320 240}
+black_outside false
+shutteroffset centred
+name Transform7
+label "\[if \{\[value translate.x] != 0 || \[value translate.y] != 0\} then \{return \"t \[value translate.x] \[value translate.y]\n\"\} else \{return \"\"\}]\[if \{\[value rotate] != 0\} then \{return \"r \[value rotate]\n\"\} else \{return \"\"\}] \[if \{\[value scale] != 1\} then \{return \"s \[value scale]\"\} else \{return \"\"\}]\[if \{\[value skewX] != 0 || \[value skewY] != 0\} then \{return \"sk \[value skewX] \[value skewY]\n\"\} else \{return \"\"\}]\[if \{\[value motionblur] != 0\} then \{return \"mb \[value motionblur] sh \[value shutter] \[value shutteroffset]\n\"\} else \{return \"\"\}]"
+xpos -161
+ypos 1015
+}
+push $N96224800
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge3
+xpos -11
+ypos 1021
+}
+Merge2 {
+inputs 2
+operation {{parent.size>0?17:18}}
+bbox B
+also_merge all
+name Merge4
+xpos -11
+ypos 1061
+}
+push $N52162000
+Dot {
+name Dot13
+tile_color 0xcccccc00
+xpos -290
+ypos -160
+}
+Dot {
+name Dot12
+tile_color 0xcccccc00
+xpos -290
+ypos 1261
+}
+NodeWrapper {
+inputs 2+1
+channels rgba
+name NodeWrapper1
+xpos -11
+ypos 1257
+}
+Output {
+name Output1
+xpos -11
+ypos 1389
+}
+NoOp {
+inputs 0
+name exp
+label "The growth doesn't look visually linear. \nUsing curves helps a little."
+xpos 396
+ypos 766
+addUserKnob {20 User}
+addUserKnob {7 expo}
+expo {{parent.size>0?positive_curve:negative_curve i}}
+addUserKnob {7 positive_curve}
+positive_curve {{curve 0 0.1037476063 0.1683235168 0.2209408283 0.2831250429 0.3357424736 0.3954704404 0.4731256962 0.5778000951 0.762029767 1}}
+addUserKnob {7 negative_curve}
+negative_curve {{curve 0 0.2209040523 0.3736710192 0.4841623592 0.5752981992 0.6541623592 0.7271137492 0.8043368459 0.8681262732 0.9249737263 1}}
+}
+end_group
+Input {
+inputs 0
+name Denoise
+xpos -254
+ypos -423
+}
+PostageStamp {
+name PostageStamp3
+label Degrain
+xpos -254
+ypos -332
+postage_stamp true
+}
+Group {
+inputs 2
+name Edge_Extrude_Directional3
+help "Gaussian in-fill. Useful to remove markers and create clean plates."
+knobChanged "m = nuke.thisNode()\nkc = nuke.thisKnob()\n\nif kc.name() in \[\"iterations\"]:\n    i = nuke.toNode('Merge1')\n    i2 = nuke.toNode('Invert1')\n    o = nuke.toNode('Transform3')\n    \n    for n in nuke.allNodes():\n      if \"static\" not in n\['label'].getValue():\n          ###print \"i would delete\" + n\['name'].value()\n          nuke.delete(n)\n    \n    \n    slices = int(m\['iterations'].value())\n    step = int(1)\n    for x in range(1,slices+step,step):\n\n      b1 = nuke.nodes.Blur()\n      b1.setInput(0, i)\n      b1\['size'].setSingleValue(False)\n      b1\['size'].setExpression(\"parent.size.w\", 0)\n      b1\['size'].setExpression(\"parent.size.h\", 1)\n\n      b2 = nuke.nodes.Blur()\n      b2.setInput(0, i2)\n      b2\['size'].setSingleValue(False)\n      b2\['size'].setExpression(\"parent.size.w\", 0)\n      b2\['size'].setExpression(\"parent.size.h\", 1)\n\n      g1 = nuke.nodes.Grade()\n      g1.setInput(0, b2)\n      g1\['channels'].setValue('rgba')\n      g1\['blackpoint'].setValue(-0.0001)\n      g1\['disable'].setExpression(\"parent.softEdges ? 0 : 1\")\n\n      m1 = nuke.nodes.Merge()\n      m1.setInput(1, b1)\n      m1.setInput(0, g1)\n      m1\['operation'].setValue(\"divide\")\n      \n      if x < slices:\n         m2 = nuke.nodes.Merge()\n         m2.setInput(1, b2)\n         m2.setInput(0, g1)\n         m2\['operation'].setValue(\"divide\")\n    \n      i = m1\n      i2 = m2\n    \n    o.setInput(0, i)\n\n"
+tile_color 0x9db2ff
+xpos -254
+ypos 787
+addUserKnob {20 User}
+addUserKnob {14 size t "Amount of 'in-fill' for one iteration. " R 0 100}
+size {1 10}
+addUserKnob {3 iterations l INVISIBLE t "How many times the blur/divide operation is repeated." +INVISIBLE}
+iterations 10
+addUserKnob {6 softEdges l INVISIBLE t "Smoother transition between iterations." -STARTLINE +INVISIBLE}
+softEdges true
+addUserKnob {14 edge_blr_size l "Seam Blur" t "Blurs the seam inbetween for blending." R 0 100}
+edge_blr_size 10
+addUserKnob {14 extend_blur_size l "extrude blur" t "Blurs the extended edges for blending." R 0 100}
+addUserKnob {7 angle l "Extrude Angle" t "Adjust the direction of the 'in-fill'. (Has no effect if size.w and size.h are the same value)." R -180 180}
+angle 45
+addUserKnob {6 blackOutside t "Clamp to format before the 'in-fill'." +STARTLINE}
+addUserKnob {4 maskChannel t "Which channel from the 'hole_mask' input is used to define the area to be 'in-filled'." M {Red Green Blue Alpha "" ""}}
+maskChannel Alpha
+addUserKnob {6 ignoreAlpha l "Don't process Alpha" t "Only process RGB channels and do not 'in-fill' the alpha channel." -STARTLINE}
+addUserKnob {7 mix t "Dissolve between the effect and the original image."}
+mix 1
+addUserKnob {26 ""}
+addUserKnob {1 Scriplet_Info +DISABLED +INVISIBLE}
+Scriplet_Info central
+addUserKnob {1 __ieScriptletPath +INVISIBLE}
+__ieScriptletPath /data/tools/nuke/scriptlets/PAINT/Edge_Extrude_Directional.nk
+addUserKnob {1 __ieScriptletCategory +INVISIBLE}
+__ieScriptletCategory PAINT
+addUserKnob {1 __ieScriptletName +INVISIBLE}
+__ieScriptletName Edge_Extrude_Directional
+}
+Input {
+inputs 0
+name mask
+label static
+xpos 184
+ypos 2059
+number 2
+}
+Input {
+inputs 0
+name img
+label static
+xpos -1271
+ypos 233
+addUserKnob {20 User}
+addUserKnob {7 blur R 0 500}
+addUserKnob {3 iterations}
+}
+set N33e79b00 [stack 0]
+push $N33e79b00
+Input {
+inputs 0
+name matte
+label static
+xpos 335
+ypos -919
+number 1
+}
+set N33e7a400 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle4
+label static
+xpos 470
+ypos -755
+}
+push $N33e7a400
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle3
+label static
+xpos 374
+ypos -757
+}
+push $N33e7a400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle2
+label static
+xpos 287
+ypos -758
+}
+push $N33e7a400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle1
+label static
+xpos 172
+ypos -769
+}
+Switch {
+inputs 4
+which {{parent.maskChannel}}
+name Switch2
+label static
+xpos 342
+ypos -673
+}
+Invert {
+name Invert2
+xpos 342
+ypos -635
+}
+set N91798d00 [stack 0]
+Dot {
+name Dot1
+xpos 288
+ypos 1666
+}
+Blur {
+channels alpha
+size {{parent.edge_blr_size.w} {parent.edge_blr_size.h}}
+name edge_blr
+xpos 64
+ypos 1656
+}
+push $N91798d00
+Transform {
+rotate {{parent.angle}}
+center {2048 1463}
+black_outside false
+name Transform2
+label static
+xpos 342
+ypos -594
+}
+set N91799700 [stack 0]
+push $N33e79b00
+Transform {
+rotate {{parent.angle}}
+center {2048 1463}
+black_outside {{parent.blackOutside}}
+name Transform1
+label static
+xpos 137
+ypos -629
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+label static
+xpos 137
+ypos -594
+}
+push $N91799700
+Merge2 {
+inputs 2
+operation out
+name Merge1
+label static
+xpos 137
+ypos -455
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur1
+xpos 137
+ypos -239
+}
+push $N91799700
+Clamp {
+name Clamp1
+label static
+xpos 342
+ypos -532
+}
+Invert {
+name Invert1
+label static
+xpos 342
+ypos -473
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur2
+xpos 342
+ypos -404
+}
+set Na1f7f200 [stack 0]
+Grade {
+channels rgba
+blackpoint -0.0001
+name Grade1
+xpos 310
+ypos -319
+disable {{"parent.softEdges ? 0 : 1"}}
+}
+set Na1f7f700 [stack 0]
+Merge {
+inputs 2
+operation divide
+name Merge2
+xpos 310
+ypos -233
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur3
+xpos 310
+ypos -79
+}
+push $Na1f7f200
+push $Na1f7f700
+Merge {
+inputs 2
+operation divide
+name Merge3
+xpos 470
+ypos -319
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur4
+xpos 470
+ypos -239
+}
+set N9666d200 [stack 0]
+Grade {
+channels rgba
+blackpoint -0.0001
+name Grade2
+xpos 470
+ypos -159
+disable {{"parent.softEdges ? 0 : 1"}}
+}
+set N9666d700 [stack 0]
+Merge {
+inputs 2
+operation divide
+name Merge4
+xpos 470
+ypos -73
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur5
+xpos 470
+ypos 81
+}
+push $N9666d200
+push $N9666d700
+Merge {
+inputs 2
+operation divide
+name Merge5
+xpos 630
+ypos -159
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur6
+xpos 630
+ypos -79
+}
+set N398fd200 [stack 0]
+Grade {
+channels rgba
+blackpoint -0.0001
+name Grade3
+xpos 630
+ypos 1
+disable {{"parent.softEdges ? 0 : 1"}}
+}
+set N398fd700 [stack 0]
+Merge {
+inputs 2
+operation divide
+name Merge6
+xpos 630
+ypos 87
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur7
+xpos 630
+ypos 241
+}
+push $N398fd200
+push $N398fd700
+Merge {
+inputs 2
+operation divide
+name Merge7
+xpos 790
+ypos 1
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur8
+xpos 790
+ypos 81
+}
+set N821a3200 [stack 0]
+Grade {
+channels rgba
+blackpoint -0.0001
+name Grade4
+xpos 790
+ypos 161
+disable {{"parent.softEdges ? 0 : 1"}}
+}
+set N821a3700 [stack 0]
+Merge {
+inputs 2
+operation divide
+name Merge8
+xpos 790
+ypos 241
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur9
+xpos 790
+ypos 401
+}
+push $N821a3200
+push $N821a3700
+Merge {
+inputs 2
+operation divide
+name Merge9
+xpos 950
+ypos 161
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur10
+xpos 950
+ypos 241
+}
+set N7ba3200 [stack 0]
+Grade {
+channels rgba
+blackpoint -0.0001
+name Grade5
+xpos 950
+ypos 321
+disable {{"parent.softEdges ? 0 : 1"}}
+}
+set N7ba3700 [stack 0]
+Merge {
+inputs 2
+operation divide
+name Merge10
+xpos 950
+ypos 401
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur11
+xpos 950
+ypos 561
+}
+push $N7ba3200
+push $N7ba3700
+Merge {
+inputs 2
+operation divide
+name Merge11
+xpos 1110
+ypos 321
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur12
+xpos 1110
+ypos 401
+}
+set N7ed33200 [stack 0]
+Grade {
+channels rgba
+blackpoint -0.0001
+name Grade6
+xpos 1110
+ypos 481
+disable {{"parent.softEdges ? 0 : 1"}}
+}
+set N7ed33700 [stack 0]
+Merge {
+inputs 2
+operation divide
+name Merge12
+xpos 1110
+ypos 561
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur13
+xpos 1110
+ypos 721
+}
+push $N7ed33200
+push $N7ed33700
+Merge {
+inputs 2
+operation divide
+name Merge13
+xpos 1270
+ypos 481
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur14
+xpos 1270
+ypos 561
+}
+set Nc729d200 [stack 0]
+Grade {
+channels rgba
+blackpoint -0.0001
+name Grade7
+xpos 1270
+ypos 641
+disable {{"parent.softEdges ? 0 : 1"}}
+}
+set Nc729d700 [stack 0]
+Merge {
+inputs 2
+operation divide
+name Merge14
+xpos 1270
+ypos 721
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur15
+xpos 1270
+ypos 881
+}
+push $Nc729d200
+push $Nc729d700
+Merge {
+inputs 2
+operation divide
+name Merge15
+xpos 1430
+ypos 641
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur16
+xpos 1430
+ypos 721
+}
+set N4bf15200 [stack 0]
+Grade {
+channels rgba
+blackpoint -0.0001
+name Grade8
+xpos 1430
+ypos 801
+disable {{"parent.softEdges ? 0 : 1"}}
+}
+set N4bf15700 [stack 0]
+Merge {
+inputs 2
+operation divide
+name Merge16
+xpos 1430
+ypos 881
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur17
+xpos 1430
+ypos 1041
+}
+push $N4bf15200
+push $N4bf15700
+Merge {
+inputs 2
+operation divide
+name Merge17
+xpos 1590
+ypos 801
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur18
+xpos 1590
+ypos 881
+}
+set N57723200 [stack 0]
+Grade {
+channels rgba
+blackpoint -0.0001
+name Grade9
+xpos 1590
+ypos 961
+disable {{"parent.softEdges ? 0 : 1"}}
+}
+set N57723700 [stack 0]
+Merge {
+inputs 2
+operation divide
+name Merge18
+xpos 1590
+ypos 1041
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur19
+xpos 1590
+ypos 1201
+}
+push $N57723200
+push $N57723700
+Merge {
+inputs 2
+operation divide
+name Merge19
+xpos 1750
+ypos 961
+}
+Blur {
+size {{parent.size.w} {parent.size.h}}
+name Blur20
+xpos 1750
+ypos 1041
+}
+Grade {
+channels rgba
+blackpoint -0.0001
+name Grade10
+xpos 1750
+ypos 1121
+disable {{"parent.softEdges ? 0 : 1"}}
+}
+Merge {
+inputs 2
+operation divide
+name Merge20
+xpos 1750
+ypos 1217
+}
+Transform {
+rotate {{parent.angle*-1}}
+center {2048 1463}
+name Transform3
+label static
+xpos -163
+ypos 1431
+}
+Blur {
+size {{parent.extend_blur_size.w} {parent.extend_blur_size.h}}
+name extend_blur
+xpos -163
+ypos 1525
+}
+push $N33e79b00
+Keymix {
+inputs 3
+bbox B
+name Keymix1
+label static
+xpos -163
+ypos 1650
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy1
+label static
+xpos -163
+ypos 1763
+disable {{"parent.ignoreAlpha ? 0 : 1"}}
+}
+push $N33e79b00
+Dissolve {
+inputs 2
+which {{parent.mix}}
+name Dissolve1
+label static
+xpos -163
+ypos 1924
+}
+Keymix {
+inputs 3
+invertMask true
+bbox B
+name Keymix2
+label static
+xpos -163
+ypos 2053
+disable {{"\[exists parent.input2] ? 0 : 1" x1 0}}
+}
+Output {
+name Output1
+label static
+xpos -163
+ypos 2155
+}
+end_group
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+bbox A
+name Copy7
+label "bbox: \[value bbox]"
+xpos -254
+ypos 1039
+}
+Premult {
+name Premult8
+xpos -254
+ypos 1110
+}
+Output {
+name Output1
+xpos -254
+ypos 1210
+}
+end_group
