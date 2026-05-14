@@ -4,10 +4,14 @@ push $cut_paste_input
 Group {
 name EdgeExtrude_RotoLayers_WIP
 selected true
-xpos -12224
+xpos -12226
 ypos 2565
-addUserKnob {20 User}
+addUserKnob {20 User l Controls}
 addUserKnob {26 inputMattes l "Input Mattes Control"}
+addUserKnob {41 size_4 l "Erode Overall" T Erode_Fine_ALL_Input.size}
+addUserKnob {41 size_1 l "Erode <font color = red>Red Channel" T Erode_Fine_RED_Input.size}
+addUserKnob {41 size_2 l "Erode<font color = green> Green Channel" T Erode_Fine_GREEN_Input.size}
+addUserKnob {41 size_3 l "Erode <font color = Blue>Blue Channel" T Erode_Fine_BLUE_Input.size}
 addUserKnob {26 opMattes l "Output Mattes Control"}
 addUserKnob {26 extrude l "Extrude Control"}
 addUserKnob {41 size l Size T Edge_Extrude_Directional3.size}
